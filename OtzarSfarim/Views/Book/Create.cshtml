@@ -1,0 +1,158 @@
+﻿@model OtzarSfarim.CRUD_models.BooksVM
+
+@{
+    ViewData["Title"] = "Create Books";
+}
+
+<h1>Create Books</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form id="booksForm" asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            @if (ViewBag.Message != null)
+            {
+                <script type="text/javascript">
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var alert = document.getElementById('alertOfHeight');
+                        alert.style.display = 'block';
+                    });
+                </script>
+            }
+            <!-- Hidden input to handle the AddBook parameter -->
+            <input type="hidden" name="AddBook" id="AddBook" value="false" />
+
+            <div style="display:none" class="alert alert-warning" role="alert" id="alertOfHeight">
+                "@ViewBag.Message "
+                <a asp-action="Create" asp-controller="Shelf">add shelf</a>
+
+            </div>
+            <div class="form-group">
+                <label>Book Type</label>
+                <div>
+                    <input type="radio" asp-for="IsSet" name="IsSet" value="false" checked />
+                    <label for="IsSet">Single</label>
+                    <input type="radio" asp-for="IsSet" name="IsSet" value="true" />
+                    <label for="IsSet">Set</label>
+                </div>
+            </div>
+
+            <div id="single-book-section">
+                <div class="form-group">
+                    <label asp-for="Books[0].BookName" class="control-label"></label>
+                    <input asp-for="Books[0].BookName" class="form-control" />
+                    <span asp-validation-for="Books[0].BookName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Books[0].BookWidth" class="control-label"></label>
+                    <input asp-for="Books[0].BookWidth" class="form-control" />
+                    <span asp-validation-for="Books[0].BookWidth" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Books[0].BookHeight" class="control-label"></label>
+                    <input asp-for="Books[0].BookHeight" class="form-control" />
+                    <span asp-validation-for="Books[0].BookHeight" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Books[0].GenreId" class="control-label"></label>
+                    <select asp-for="Books[0].GenreId" class="form-control" asp-items='@(ViewData["GenreId"] as IEnumerable<SelectListItem>)'>
+                        <option value="" disabled selected>Select Genre</option>
+                    </select>
+                    <span asp-validation-for="Books[0].GenreId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div id="set-book-section" style="display:none;">
+                <div class="form-group">
+                    <label asp-for="BookHeight" class="control-label"></label>
+                    <input asp-for="BookHeight" class="form-control" />
+                    <span asp-validation-for="BookHeight" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SetName" class="control-label"></label>
+                    <input asp-for="SetName" class="form-control" />
+                    <span asp-validation-for="SetName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="GenreId" class="control-label"></label>
+                    <select asp-for="GenreId" class="form-control" asp-items='@(ViewData["GenreId"] as IEnumerable<SelectListItem>)'>
+                        <option value="" disabled selected>Select Genre</option>
+                    </select>
+                    <span asp-validation-for="GenreId" class="text-danger"></span>
+                </div>
+
+              
+
+                <div id="books-container"> </div>
+                <button type="button" id="add-book" class="btn btn-secondary">Add another book</button>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.querySelectorAll('input[name="IsSet"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                if (this.value === 'true') {
+                    document.getElementById('single-book-section').style.display = 'none';
+                    document.getElementById('set-book-section').style.display = 'block';
+                    disableSingleBookInputs();
+                } else {
+                    document.getElementById('single-book-section').style.display = 'block';
+                    document.getElementById('set-book-section').style.display = 'none';
+                    enableSingleBookInputs();
+                }
+            });
+        });
+
+        function disableSingleBookInputs() {
+            document.querySelectorAll('#single-book-section input, #single-book-section select').forEach(input => {
+                input.disabled = true;
+            });
+        }
+
+        function enableSingleBookInputs() {
+            document.querySelectorAll('#single-book-section input, #single-book-section select').forEach(input => {
+                input.disabled = false;
+            });
+        }
+
+        document.getElementById('add-book').addEventListener('click', function () {
+            var booksContainer = document.getElementById('books-container');
+            var index = booksContainer.children.length ;
+            var newBookForm = `
+                        <div class="book-form mb-3" id="book-form-${index}">
+                                    <h4>Book ${index}</h4>
+                            <div class="form-group">
+                                <label for="Books_${index}__BookName">Book name</label>
+                                <input class="form-control" type="text" id="Books_${index}__BookName" name="Books[${index}].BookName" />
+                                <span class="text-danger" data-valmsg-for="Books[${index}].BookName" data-valmsg-replace="true"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="Books_${index}__BookWidth">Book width</label>
+                                <input class="form-control" type="number" id="Books_${index}__BookWidth" name="Books[${index}].BookWidth" />
+                                <span class="text-danger" data-valmsg-for="Books[${index}].BookWidth" data-valmsg-replace="true"></span>
+                            </div>
+                            <button type="button" class="btn btn-danger" onclick="removeBookForm(${index})">Remove</button>
+                        </div>`;
+            booksContainer.insertAdjacentHTML('beforeend', newBookForm);
+        });
+
+        function removeBookForm(index) {
+            var bookForm = document.getElementById(`book-form-${index}`);
+            bookForm.remove();
+        }
+    </script>
+}

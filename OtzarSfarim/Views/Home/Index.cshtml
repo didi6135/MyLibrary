@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+
+  
+
+    <div style="padding: 50px">
+        <h2>Add somthing</h2>
+        <button type="button" class="btn btn-outline-info">
+            <a style="color:white" class="nav-link text-dark" asp-area="" asp-controller="Shelf" asp-action="Create">Add new Shelf</a>
+        </button>
+        <button type="button" class="btn btn-outline-info">
+            <a style="color:white" class="nav-link text-dark" asp-area="" asp-controller="Genre" asp-action="Create">Add new Genre</a>
+        </button>
+        <button type="button" class="btn btn-outline-info">
+            <a style ="color:white" class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="Create">Add new Book</a>
+        </button>
+    </div>
+
+    <div>
+        <h2>See all your things</h2>
+        <button type="button" class="btn btn-outline-primary">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="Index">All books</a>
+        </button>
+        <button type="button" class="btn btn-outline-primary">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Shelf" asp-action="Index">All Shelves</a>
+        </button>
+        <button type="button" class="btn btn-outline-primary">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Genre" asp-action="Index">All Genre</a>
+        </button>
+    </div>
+
+</div>

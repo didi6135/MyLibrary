@@ -1,0 +1,33 @@
+﻿@model IEnumerable<OtzarSfarim.Models.BookModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>The all books</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<form asp-action="Index" method="get">
+    <label for="genreSelect">Sort by Genre:</label>
+    <select id="genreSelect" name="genreId" asp-items="ViewBag.Genres" onchange="this.form.submit()">
+        <option value="">All Genres</option>
+    </select>
+</form>
+
+<div style="display: flex; align-items: center; justify-content:center; flex-wrap:wrap; gap: 10px ">
+    @foreach (var item in Model)
+    {
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">@Html.DisplayFor(modelItem => item.BookName)</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Width: @Html.DisplayFor(modelItem => item.BookWidth) Height: @Html.DisplayFor(modelItem => item.BookHeight)</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Set name: @Html.DisplayFor(modelItem => item.SetName)</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Shelf ID: @Html.DisplayFor(modelItem => item.ShelfId)</h6>
+
+            </div>
+        </div>
+    }
+</div>
