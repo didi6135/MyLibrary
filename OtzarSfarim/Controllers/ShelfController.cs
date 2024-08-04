@@ -46,19 +46,35 @@ namespace OtzarSfarim.Controllers
         }
 
         // GET: Shelf/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
+
+            if(id != null)
+            {
+                var TheGenre = _context.GenreModel.FirstOrDefault(s => s.Id == id);
+                var list = new List<GenreModel> { TheGenre };
+
+                ViewData["GenreId"] = new SelectList(list, "Id", "GenreType", TheGenre.Id);
+                
+                return View();
+
+            }
+
             ViewData["GenreId"] = new SelectList(_context.GenreModel, "Id", "GenreType");
             return View();
         }
 
+
+        //[Bind("Id,Height,Width,GenreId")]
         // POST: Shelf/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Height,Width,GenreId")] ShelfModel shelfModel)
+        public async Task<IActionResult> Create([Bind("Height,Width,GenreId")] ShelfModel shelfModel)
         {
+
+
             shelfModel.FreeSpace = shelfModel.Width;
 
             if (ModelState.IsValid)
@@ -70,6 +86,9 @@ namespace OtzarSfarim.Controllers
             ViewData["GenreId"] = new SelectList(_context.GenreModel, "Id", "GenreType", shelfModel.GenreId);
             return View(shelfModel);
         }
+
+
+
 
         // GET: Shelf/Edit/5
         public async Task<IActionResult> Edit(int? id)

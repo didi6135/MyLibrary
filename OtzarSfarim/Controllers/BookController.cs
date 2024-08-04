@@ -111,7 +111,7 @@ namespace OtzarSfarim.Controllers
 
             if (shelf == null)
             {
-                ViewBag.Message = $"No available shelf with enough free space found.";
+                ViewBag.Message = "No available shelf with enough free space found.";
                 ViewData["GenreId"] = new SelectList(_context.Set<GenreModel>(), "Id", "GenreType");
                 return View("Create", booksVM);
             }

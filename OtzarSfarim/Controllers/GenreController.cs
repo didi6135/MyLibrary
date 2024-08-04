@@ -56,6 +56,12 @@ namespace OtzarSfarim.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,GenreType")] GenreModel genreModel)
         {
+            if(_context.GenreModel.Any(g => g.GenreType == genreModel.GenreType))
+            {
+                ModelState.AddModelError("GenreType", "This genre already exist");
+                return View(genreModel);
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(genreModel);

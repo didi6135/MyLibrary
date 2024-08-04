@@ -13,6 +13,10 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Genre)
+                
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Height)
             </th>
             <th>
@@ -21,16 +25,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.FreeSpace)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Genre)
-                
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Genre.GenreType)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Height)
             </td>
@@ -40,16 +43,17 @@
             <td>
                 @Html.DisplayFor(modelItem => item.FreeSpace)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Genre.GenreType)
-            </td>
 
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+<div>
+    <button type="button" class="btn btn-outline-info">
+        <a style="color:white" class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="Create">Add new Book</a>
+    </button>
+</div>
